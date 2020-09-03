@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.OrdersMapper">
+  <resultMap id="BaseResultMap" type="pojo.Orders">
+    <constructor>
+      <idArg column="oid" javaType="Long" jdbcType="bigint" />
+      <arg column="uid" javaType="Long" jdbcType="bigint" />
+      <arg column="time" javaType="java.sql.Timestamp" jdbcType="timestamp" />
+      <arg column="total_money" javaType="Double" jdbcType="double" />
+      <arg column="amount" javaType="Long" jdbcType="bigint" />
+      <arg column="address" javaType="String" jdbcType="varchar" />
+      <arg column="phone" javaType="String" jdbcType="varchar" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    oid, uid, time, total_money, amount, address, phone
+  </sql>
+  <select id="selectByExample" parameterType="pojo.OrdersExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_order
+    where oid = #{oid,jdbcType=bigint}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="Long">
+    delete from tb_order
+    where oid = #{oid,jdbcType=bigint}
+  </delete>
+  <delete id="deleteByExample" parameterType="pojo.OrdersExample">
+    delete from tb_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="pojo.Orders">
+    insert into tb_order (oid, uid, time, 
+      total_money, amount, address, 
+      phone)
+    values (#{oid,jdbcType=bigint}, #{uid,jdbcType=bigint}, #{time,jdbcType=timestamp}, 
+      #{totalMoney,jdbcType=double}, #{amount,jdbcType=bigint}, #{address,jdbcType=varchar}, 
+      #{phone,jdbcType=varchar})
+  </insert>
+  <insert id="insertSelective" parameterType="pojo.Orders">
+    insert into tb_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="oid != null">
+        oid,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="totalMoney != null">
+        total_money,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="oid != null">
+        #{oid,jdbcType=bigint},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=bigint},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=timestamp},
+      </if>
+      <if test="totalMoney != null">
+        #{totalMoney,jdbcType=double},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=bigint},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=varchar},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=varchar},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="pojo.OrdersExample" resultType="java.lang.Long">
+    select count(*) from tb_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_order
+    <set>
+      <if test="record.oid != null">
+        oid = #{record.oid,jdbcType=bigint},
+      </if>
+      <if test="record.uid != null">
+        uid = #{record.uid,jdbcType=bigint},
+      </if>
+      <if test="record.time != null">
+        time = #{record.time,jdbcType=timestamp},
+      </if>
+      <if test="record.totalMoney != null">
+        total_money = #{record.totalMoney,jdbcType=double},
+      </if>
+      <if test="record.amount != null">
+        amount = #{record.amount,jdbcType=bigint},
+      </if>
+      <if test="record.address != null">
+        address = #{record.address,jdbcType=varchar},
+      </if>
+      <if test="record.phone != null">
+        phone = #{record.phone,jdbcType=varchar},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_order
+    set oid = #{record.oid,jdbcType=bigint},
+      uid = #{record.uid,jdbcType=bigint},
+      time = #{record.time,jdbcType=timestamp},
+      total_money = #{record.totalMoney,jdbcType=double},
+      amount = #{record.amount,jdbcType=bigint},
+      address = #{record.address,jdbcType=varchar},
+      phone = #{record.phone,jdbcType=varchar}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="pojo.Orders">
+    update tb_order
+    <set>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=bigint},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=timestamp},
+      </if>
+      <if test="totalMoney != null">
+        total_money = #{totalMoney,jdbcType=double},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=bigint},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=varchar},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=varchar},
+      </if>
+    </set>
+    where oid = #{oid,jdbcType=bigint}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="pojo.Orders">
+    update tb_order
+    set uid = #{uid,jdbcType=bigint},
+      time = #{time,jdbcType=timestamp},
+      total_money = #{totalMoney,jdbcType=double},
+      amount = #{amount,jdbcType=bigint},
+      address = #{address,jdbcType=varchar},
+      phone = #{phone,jdbcType=varchar}
+    where oid = #{oid,jdbcType=bigint}
+  </update>
+  <cache flushInterval="20000" />
+</mapper>
